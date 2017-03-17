@@ -1,0 +1,14 @@
+{
+  "name": "Console13",
+  "AMIBs": {
+    "AMIB1": {
+      "serialNumber": "85436323531351E070F1"
+    },
+    "AMIB2": {
+      "serialNumber": "854333332313516011A1"
+    },
+    "AMIB3": {
+      "serialNumber": "55438303439351F01152"
+    }
+  }
+}

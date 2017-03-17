@@ -1,0 +1,178 @@
+class IDLE:
+    pass
+
+class BERNOULLIFAN:
+    def master():
+        def events():
+            demo
+            homeFan
+            liftBall
+        def values():
+            tableAngle = uint16_t
+            fanAngle = uint16_t
+    def amib3():
+        def events():
+            demo
+            homeFan
+            liftBall
+        def values():
+            tableAngle = uint16_t
+            fanAngle = uint16_t
+
+class FISHYTANK:
+    def master():
+        def events():
+            spinTank
+        def values():
+            fishyMotorSpeed = uint16_t
+
+class MAGNETICVORTEX:
+    def master():
+        def events():
+            pistonStop
+            demo
+            cycleBall
+            startSensor
+            lowPiston
+            highPiston
+            
+        def values():
+            motorSpeed = uint16_t
+            motorDir = uint16_t
+            DCMotorSpeed = uint16_t
+            dialPosition = uint8_t
+
+    def amib2():
+        pass
+                
+    def amib3():
+        def events():
+            pistonStop
+            cycleBall
+            startSensor
+            lowPiston
+            highPiston
+
+
+class SPINNYLIFTER:
+    def master():
+        def values():
+            spinnyOffset1 = int16_t
+            topSensor = uint16_t
+        def events():
+            demo
+            cycleBall
+            liftBall
+    def amib2():
+        def events():
+          liftBall
+        def values():
+          topSensor = uint16_t
+
+class SPINNYLIFTER2:
+    def master():
+        def values():
+            spinnyOffset1 = uint16_t
+        def events():
+            demo
+            cycleBall
+            cycleEntranceStop
+            cycleExitStop
+            stopMovement
+            
+    def amib2():
+        def events():
+            cycleEntranceStop
+
+    def amib3():
+        def values():
+            spinnyOffset1 = uint16_t
+        def events():
+            demo
+            cycleBall
+            cycleExitStop
+            stopMovement
+
+class SPINNYPASSIVEDROP:
+    pass
+
+class SWISHYBOATS:
+    def master():
+        def values():
+            LIDAR1Trig = bool
+            LIDAR2Trig = bool
+            LIDAR3Trig = bool
+            LIDAR4Trig = bool
+            boatNumber = uint16_t
+        def events():
+            cycleEntranceStop
+            cycleExitStop
+            cycleBall
+            lastBoat
+            entranceStopOn
+            entranceStopOff
+            test
+
+    def amib2():
+        def values():
+            LIDAR1Trig = bool
+            LIDAR2Trig = bool
+            LIDAR3Trig = bool
+            LIDAR4Trig = bool
+        def events():
+            cycleEntranceStop
+            cycleExitStop
+            cycleBall
+            lastBoat
+            entranceStopOn
+            entranceStopOff
+            test
+			
+class BALLCHECK:
+#AMIB 2 MASTER AND AMIB 3
+    def master():
+        def events():
+            checkSensors
+            waitForBall
+            amib2Ready
+            amib3Ready
+            amib2NotReady
+            amib3NotReady
+        def values():
+            ballSense1 = bool
+            ballSense2 = bool
+            ballSense3 = bool
+            ballSense4 = bool
+    def amib2():
+        def events():
+            checkSensors
+        def values():
+            ballSense1 = bool
+            ballSense2 = bool
+            ballSense3 = bool
+            ballSense4 = bool
+    def amib3():
+        def events():
+            checkSensors
+        def values():
+            ballSense1 = bool
+            ballSense2 = bool
+            ballSense3 = bool
+            ballSense4 = bool
+    def tablet():
+        def values():
+            ballSense1 = bool
+            ballSense2 = bool
+            ballSense3 = bool
+            ballSense4 = bool
+        def events():
+            resume
+            amib1Ready
+            amib2Ready
+            amib3Ready
+            amib1NotReady
+            amib2NotReady
+            amib3NotReady
+            checkBallDone
+class OFF:
+    pass

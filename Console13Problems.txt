@@ -1,0 +1,23 @@
+List of Console 13 Problems:
+
+Bernoulli:
+-Entire thing is just sitting there. not fastened in.
+-Fan homing sensor screw not engaged
+
+Spinny Lifter:
+-Ball can fall off at beginning before first spinny lifter
+-Ball can get stuck away from sensor after swishy boats
+
+SpinnyLifter 2:
+-Steppers binding
+-Ball can get stuck inbetween black ramp and spinnylifter2
+
+Swishy Boats:
+-Ball can bounce out
+
+Wiring:
+-Much of the wiring was wrong and has been fixed* (Fixed as in working)
+  -Much of it should be checked and the spreadsheet/labels need to be updated
+
+My ToDo:
+-Wire bernoulli to work
