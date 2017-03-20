@@ -41,7 +41,7 @@ void TCASelect(uint8_t i) {
 
 //Moved LIDAR error codes to seperate method for streamlining
 void debugLIDAR(int index, uint8_t status) {
-    if  ((status >= VL6180X_ERROR_SYSERR_1) && (status <= VL6180X_ERROR_SYSERR_5)) {
+     if  ((status >= VL6180X_ERROR_SYSERR_1) && (status <= VL6180X_ERROR_SYSERR_5)) {
       Serial.println("System error");
     }
     else if (status == VL6180X_ERROR_ECEFAIL) {
@@ -73,37 +73,77 @@ void debugLIDAR(int index, uint8_t status) {
 //checks the sensors and detects if the ball is there based off of the difference it changed
 bool checkLIDAR(uint8_t index) {
   
-  bool ballFound = false;
+    bool ballFound = false;
  
-  if (index < 4) {
-    TCASelect(index); //boatNumber.value
-    range = sensor.readRange();
-    status = sensor.readRangeStatus();
+    if (index < 4) {
+        TCASelect(index); //boatNumber.value
+        range = sensor.readRange();
+        status = sensor.readRangeStatus();
     
 //    Serial.println(range);
 //    Serial.println(status);
   
-    debugLIDAR(index, status);
-    if (status == VL6180X_ERROR_NONE) {
-      if(abs(LIDARAverage[index] - range) > 10) {
-        ballFound = true;
-      }
-    }
+        debugLIDAR(index, status);
+        if (status == VL6180X_ERROR_NONE) {
+            if (abs(LIDARAverage[index] - range) > 10) {
+                ballFound = true;
+            }
+        }
  //   else {Serial.print("NOPE");}
-  }
+    } 
   
-  return ballFound;
+    return ballFound;
+}
+
+Value<bool>* LIDARTrig[] = {&LIDAR1Trig, &LIDAR2Trig, &LIDAR3Trig, &LIDAR4Trig};
+
+void updateMaster(uint8_t index) {
+    
+    Serial.print("LIDAR value: ");
+    Serial.print((*LIDARTrig[index]).value);
+    Serial.print(" changed: ");
+    Serial.println((*LIDARTrig[index]).changed);
+       
+    switch(index) {
+        case 1:
+            MANAGER_PASS_ON(amib2, LIDAR1Trig);
+            break;
+        case 2:
+            MANAGER_PASS_ON(amib2, LIDAR2Trig);
+            break;
+        case 3:
+            MANAGER_PASS_ON(amib2, LIDAR3Trig);
+            break;
+        case 4:
+            MANAGER_PASS_ON(amib2, LIDAR4Trig);
+            break;
+        default:
+            break;
+    }
+}
+
+void initLIDAR() {
+    for (uint8_t i = 0; i < 4; i++) {
+        (*LIDARTrig[i]).value = false;
+        (*LIDARTrig[i]).changed = false;
+        
+        TCASelect(i);
+        while (!sensor.begin()) {
+            Serial3.print("Failed to find sensor ");
+            Serial3.println(i);
+        }
+        
+        //has found the sensor if it gets here, and prints it
+        Serial3.print("Sensor ");
+        Serial3.print(i);
+        Serial3.println(" found!");
+    }
 }
 
 void setup() {
 
   //Which sensor is being read and passing value initialization
   boatNumber.value = 0;
-  LIDAR1Trig.value = false;
-  LIDAR2Trig.value = false;
-  LIDAR3Trig.value = false;
-  LIDAR4Trig.value = false;
-  RemoteValue<bool>* LIDARTrig[] = {&LIDAR1Trig, &LIDAR2Trig, &LIDAR3Trig, &LIDAR4Trig};
 
   //waits to start until the serial monitor works
   while (!Serial3);
@@ -114,17 +154,14 @@ void setup() {
   Serial3.begin(115200);
   Serial3.println("Starting Setup!");
   
-  //goes through initializing the 4 sensors
-  for (uint8_t i = 0; i < 4; i++) { //1 for now
-    TCASelect(i);
-    while (! sensor.begin()) {
-      Serial3.print("Failed to find sensor ");
-      Serial3.println(i);
-    }
-    //has found the sensor if it gets here, and prints it
-    Serial3.print("Sensor ");
-    Serial3.print(i);
-    Serial3.println(" found!");
+  initLIDAR();
+    
+  for (int i = 0; i < 4; i++) {  
+      if (checkLIDAR(i) == true) {
+          Serial.print(i);
+          Serial.println(" ball found");
+          updateMaster(i);
+     }
   }
   
 }
@@ -136,11 +173,11 @@ void enter() {
 
 void loop() {
   for (int i = 0; i < 4; i++) {  
-    if (checkLIDAR(i) == true) {
-        Serial.print(i);
-        Serial.println(" ball found");
-        MANAGER_PASS_ON(amib2, *LIDARTrig[i]);
-    }
+      if (checkLIDAR(i) == true) {
+          Serial.print(i);
+          Serial.println(" ball found");
+          updateMaster(i);
+     }
   }
 }
 
